@@ -1,0 +1,13 @@
+{
+	"name"        : "bilbous/bootstrap-durationpicker",
+	"description" : "A simple durationpicker component for Twitter Bootstrap.",
+	"version"     : "1.0.0",
+	"license"     : "MIT",
+	"authors": [
+		{
+	    "name" : "Yannick Cenatiempo",
+	    "email" : "ycenatiempo@gmail.com"
+		}
+	]
+
+}
