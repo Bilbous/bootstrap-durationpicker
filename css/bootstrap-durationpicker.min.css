@@ -19,4 +19,5 @@
 .bootstrap-durationpicker-widget table td a i{margin-top:2px;font-size:18px}
 .bootstrap-durationpicker-widget table td input{width:30px;margin:0;text-align:center}
 .bootstrap-durationpicker-widget .modal-content{padding:4px}
+.bootstrap-durationpicker-widget.modal{position:absolute}
 @media (min-width:767px){.bootstrap-durationpicker-widget.modal{width:200px;margin-left:-100px}}@media (max-width:767px){.bootstrap-durationpicker{width:100%}.bootstrap-durationpicker .dropdown-menu{width:100%}}
