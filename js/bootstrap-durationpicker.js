@@ -316,12 +316,19 @@
     },
 
     highlightUnit: function() {
+      var hourLength = 2;
+      if (this.hour >= 100) {
+        hourLength = 3;
+      } else if (self.hour < 10) {
+        hourLength = 1
+      }
+      
       this.position = this.getCursorPosition();
-      if (this.position >= 0 && this.position <= 2) {
+      if (this.position >= 0 && this.position <= hourLength) {
         this.highlightHour();
-      } else if (this.position >= 3 && this.position <= 5) {
+      } else if (this.position >= hourLength+1 && this.position <= hourLength+3) {
         this.highlightMinute();
-      } else if (this.position >= 6 && this.position <= 8) {
+      } else if (this.position >= hourLength+4 && this.position <= hourLength+6) {
         if (this.showSeconds) {
           this.highlightSecond();
         }
@@ -371,8 +378,8 @@
       this.highlightedUnit = 'hour';
 
       if ($element.setSelectionRange) {
-		setTimeout(function() {
-          if (self.hour > 100) {
+        setTimeout(function() {
+          if (self.hour >= 100) {
             $element.setSelectionRange(0,3);
           } else if (self.hour < 10) {
             $element.setSelectionRange(0,1);
@@ -380,7 +387,7 @@
             $element.setSelectionRange(0,2);
           }
         }, 0);
-	  }
+      }
     },
 
     highlightMinute: function() {
@@ -391,14 +398,14 @@
 
       if ($element.setSelectionRange) {
         setTimeout(function() {
-          if (self.hour > 100) {
+          if (self.hour >= 100) {
             $element.setSelectionRange(4,6);
           } else if (self.hour < 10) {
             $element.setSelectionRange(2,4);
           } else {
             $element.setSelectionRange(3,5);
           }
-		}, 0);
+        }, 0);
       }
     },
 
@@ -410,14 +417,14 @@
 
       if ($element.setSelectionRange) {
         setTimeout(function() {
-          if (self.hour > 100) {
+          if (self.hour >= 100) {
             $element.setSelectionRange(7,9);
           } else if (self.hour < 10) {
             $element.setSelectionRange(5,7);
           } else {
             $element.setSelectionRange(6,8);
           }
-		}, 0);
+        }, 0);
       }
     },
 
