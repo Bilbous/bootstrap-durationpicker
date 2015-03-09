@@ -17,7 +17,7 @@
   var Durationpicker = function(element, options) {
     this.widget = '';
     this.$element = $(element);
-    this.defaultTime = options.defaultTime;
+    this.defaultDuration = options.defaultDuration;
     this.disableFocus = options.disableFocus;
     this.disableMousewheel = options.disableMousewheel;
     this.isOpen = options.isOpen;
@@ -87,7 +87,7 @@
         });
       }
 
-      this.setDefaultTime(this.defaultTime);
+      this.setDefaultDuration(this.defaultDuration);
     },
 
     blurElement: function() {
@@ -280,7 +280,7 @@
       return template;
     },
 
-    getTime: function() {
+    getDuration: function() {
       if (this.hour === '') {
         return '';
       }
@@ -295,8 +295,8 @@
 
       this.$element.trigger({
         'type': 'hide.durationpicker',
-        'time': {
-          'value': this.getTime(),
+        'duration': {
+          'value': this.getDuration(),
           'hours': this.hour,
           'minutes': this.minute,
           'seconds': this.second,
@@ -578,106 +578,70 @@
       delete this.$element.data().durationpicker;
     },
 
-    setDefaultTime: function(defaultTime) {
+    setDefaultDuration: function(defaultDuration) {
       if (!this.$element.val()) {
-        if (defaultTime === 'current') {
-          var dTime = new Date(),
-            hours = dTime.getHours(),
-            minutes = dTime.getMinutes(),
-            seconds = dTime.getSeconds();
-
-          if (seconds !== 0) {
-            seconds = Math.ceil(dTime.getSeconds() / this.secondStep) * this.secondStep;
-            if (seconds === 60) {
-              minutes += 1;
-              seconds = 0;
-            }
-          }
-
-          if (minutes !== 0) {
-            minutes = Math.ceil(dTime.getMinutes() / this.minuteStep) * this.minuteStep;
-            if (minutes === 60) {
-              hours += 1;
-              minutes = 0;
-            }
-          }
-
-          this.hour = hours;
-          this.minute = minutes;
-          this.second = seconds;
-
-          this.update();
-
-        } else if (defaultTime === false) {
+        if (defaultDuration === false) {
           this.hour = 0;
           this.minute = 0;
           this.second = 0;
         } else {
-          this.setTime(defaultTime);
+          this.setDuration(defaultDuration);
         }
       } else {
         this.updateFromElementVal();
       }
     },
 
-    setTime: function(time, ignoreWidget) {
-      if (!time) {
+    setDuration: function(duration, ignoreWidget) {
+      if (!duration) {
         this.clear();
         return;
       }
 
-      var timeArray,
+      var durationArray,
           hour,
           minute,
           second;
 
-      if (typeof time === 'object' && time.getMonth){
-        // this is a date object
-        hour    = time.getHours();
-        minute  = time.getMinutes();
-        second  = time.getSeconds();
-      } else {
+      duration = duration.replace(/[^0-9\:]/g, '');
 
-        time = time.replace(/[^0-9\:]/g, '');
+      durationArray = duration.split(':');
 
-        timeArray = time.split(':');
+      hour = durationArray[0] ? durationArray[0].toString() : durationArray.toString();
+      minute = durationArray[1] ? durationArray[1].toString() : '';
+      second = durationArray[2] ? durationArray[2].toString() : '';
 
-        hour = timeArray[0] ? timeArray[0].toString() : timeArray.toString();
-        minute = timeArray[1] ? timeArray[1].toString() : '';
-        second = timeArray[2] ? timeArray[2].toString() : '';
+      hour = parseInt(hour, 10);
+      minute = parseInt(minute, 10);
+      second = parseInt(second, 10);
 
-        hour = parseInt(hour, 10);
-        minute = parseInt(minute, 10);
-        second = parseInt(second, 10);
+      if (isNaN(hour)) {
+        hour = 0;
+      }
+      if (isNaN(minute)) {
+        minute = 0;
+      }
+      if (isNaN(second)) {
+        second = 0;
+      }
 
-        if (isNaN(hour)) {
-          hour = 0;
-        }
-        if (isNaN(minute)) {
-          minute = 0;
-        }
+      if (hour < 0) {
+        hour = 0;
+      }
+
+      if (minute < 0) {
+        minute = 0;
+      } else if (minute >= 60) {
+        minute = 59;
+      }
+
+      if (this.showSeconds) {
         if (isNaN(second)) {
-          second = 0;
-        }
-
-        if (hour < 0) {
-          hour = 0;
-        }
-
-        if (minute < 0) {
-          minute = 0;
-        } else if (minute >= 60) {
-          minute = 59;
-        }
-
-        if (this.showSeconds) {
-          if (isNaN(second)) {
-            second = 0;
-          } else if (second < 0) {
-            second = 0;
-          } else if (second >= 60) {
-            second = 59;
-          }
+        second = 0;
+        } else if (second < 0) {
+        second = 0;
+        } else if (second >= 60) {
+         second = 59;
         }
       }
 
@@ -712,8 +676,8 @@
 
       this.$element.trigger({
         'type': 'show.durationpicker',
-        'time': {
-          'value': this.getTime(),
+        'duration': {
+          'value': this.getDuration(),
           'hours': this.hour,
           'minutes': this.minute,
           'seconds': this.second
@@ -727,10 +691,10 @@
 
       // widget shouldn't be empty on open
       if (this.hour === '') {
-        if (this.defaultTime) {
-          this.setDefaultTime(this.defaultTime);
+        if (this.defaultDuration) {
+          this.setDefaultDuration(this.defaultDuration);
         } else {
-          this.setTime('0:0:0');
+          this.setDuration('0:0:0');
         }
       }
 
@@ -752,9 +716,9 @@
       }
 
       this.$element.trigger({
-        'type': 'changeTime.durationpicker',
-        'time': {
-          'value': this.getTime(),
+        'type': 'changeDuration.durationpicker',
+        'duration': {
+          'value': this.getDuration(),
           'hours': this.hour,
           'minutes': this.minute,
           'seconds': this.second
@@ -763,11 +727,11 @@
     },
 
     updateElement: function() {
-      this.$element.val(this.getTime()).change();
+      this.$element.val(this.getDuration()).change();
     },
 
     updateFromElementVal: function() {
-      this.setTime(this.$element.val());
+      this.setDuration(this.$element.val());
     },
 
     updateWidget: function() {
@@ -806,7 +770,7 @@
               (this.showSeconds ? ':' + this.$widget.find('input.bootstrap-durationpicker-second').val() : '')
       ;
 
-      this.setTime(t, true);
+      this.setDuration(t, true);
     },
 
     widgetClick: function(e) {
@@ -853,7 +817,7 @@
           this.incrementSecond();
           break;
         }
-        this.setTime(this.getTime());
+        this.setDuration(this.getDuration());
         if ($input.get(0).setSelectionRange) {
           $input.get(0).setSelectionRange(0, $input.val().length);
         }
@@ -871,7 +835,7 @@
           this.decrementSecond();
           break;
         }
-        this.setTime(this.getTime());
+        this.setDuration(this.getDuration());
         if ($input.get(0).setSelectionRange) {
           $input.get(0).setSelectionRange(0, $input.val().length);
         }
@@ -906,7 +870,7 @@
   };
 
   $.fn.durationpicker.defaults = {
-    defaultTime: 'current',
+    defaultDuration: false,
     disableFocus: false,
     disableMousewheel: false,
     isOpen: false,
