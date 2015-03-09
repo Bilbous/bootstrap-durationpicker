@@ -28,6 +28,7 @@
     this.showInputs = options.showInputs;
     this.showSeconds = options.showSeconds;
     this.template = options.template;
+    this.customTemplateContent = options.customTemplateContent;
     this.appendWidgetTo = options.appendWidgetTo;
     this.showWidgetOnAddonClick = options.showWidgetOnAddonClick;
 
@@ -226,7 +227,7 @@
         secondTemplate = '<span class="bootstrap-durationpicker-second"></span>';
       }
 
-      templateContent = '<table>'+
+      templateContent = (this.customTemplateContent !== false) ? this.customTemplateContent : '<table>'+
          '<tr>'+
            '<td><a href="#" data-action="incrementHour"><i class="icon-chevron-up"></i></a></td>'+
            '<td class="separator">&nbsp;</td>'+
@@ -916,6 +917,7 @@
     showSeconds: false,
     showInputs: true,
     template: 'dropdown',
+    customTemplateContent: false,
     appendWidgetTo: 'body',
     showWidgetOnAddonClick: true
   };
