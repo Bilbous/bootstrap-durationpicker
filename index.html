@@ -107,7 +107,7 @@
                     template: 'modal',
                     appendWidgetTo: 'body',
                     showSeconds: false,
-                    defaultTime: false
+                    defaultDuration: false
                 });
             &lt;/script&gt;
         &lt;/body&gt;
@@ -302,7 +302,7 @@
                         <td>Specify a step for the second field.</td>
                     </tr>
                     <tr>
-                        <td>defaultTime</td>
+                        <td>defaultDuration</td>
                         <td>
                             'current' (default) <hr />
                             '11:45' <hr />
@@ -357,9 +357,9 @@
     <pre class="prettyprint linenums">
       var duration = $('#durationpicker').durationpicker('showWidget');
     </pre>
-        <h3>setTime <small>Set the curation manually</small></h3>
+        <h3>setDuration <small>Set the curation manually</small></h3>
     <pre class="prettyprint linenums">
-      $('#durationpicker').durationpicker('setTime', '12:45');
+      $('#durationpicker').durationpicker('setDuration', '12:45');
     </pre>
         <hr>
         <h1>Events</h1>
@@ -383,7 +383,7 @@
     </pre>
             <h3>Update <small>Triggered when the date is updated</small></h3>
     <pre class="prettyprint linenums">
-      $('#durationpicker').durationpicker().on('changeTime.durationpicker', function(e) {
+      $('#durationpicker').durationpicker().on('changeDuration.durationpicker', function(e) {
         console.log('The duration is ' + e.duration.value);
         console.log('The hour is ' + e.duration.hour);
         console.log('The minute is ' + e.duration.minute);
